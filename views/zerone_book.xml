@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Top menu item -->
+        <menuitem name="1Books" id="menu_books_root" sequence="50" groups="base.group_user"
+                  web_icon="fcwz_manufacture_manage,static/description/icon.png"/>
+        <menuitem id="menu_books" name='图书' parent="menu_books_root" sequence="15"/>
+
+        <!--Search View-->
+        <record id="view_zerone_books_search" model="ir.ui.view">
+            <field name="name">zerone.book.search</field>
+            <field name="model">zerone.book</field>
+            <field name="arch" type="xml">
+<!--                ===========================-->
+                <search string="Books">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="author"/>
+                    <group expand="0" string="Group By">
+                        <filter string="作者" name="author_group" context="{'group_by':'author'}"/>
+<!--                        name_group是过滤器名称-->
+                        <filter string="图书名称" name="name_group" context="{'group_by':'name'}"/>
+                    </group>
+                </search>
+<!--                ===============================-->
+            </field>
+        </record>
+        <!--Tree View-->
+        <record id="view_zerone_books_tree" model="ir.ui.view">
+            <field name="name">zerone.book.tree</field>
+            <field name="model">zerone.book</field>
+            <field name="arch" type="xml">
+                <tree string="Books">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="date_last_borrowed"/>
+                </tree>
+            </field>
+        </record>
+        <!--Form View-->
+        <record id="view_zerone_books_form" model="ir.ui.view">
+            <field name="name">zerone.book.form</field>
+            <field name="model">zerone.book</field>
+            <field name="arch" type="xml">
+                <form string="Books">
+                    <header>
+                        <button name="action_borrow" type="object" string="借阅" class="btn-primary"
+                                attrs="{'invisible': [('borrowed', '=', True)]}"/>
+                        <button name="action_return" type="object" string="归还" class="btn-primary"
+                                attrs="{'invisible': [('borrowed', '=', False)]}"/>
+                    </header>
+                    <sheet string="5Books">
+                        <group col="4">
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="author"/>
+                            <field name="isbn"/>
+                            <field name="pages"/>
+                            <field name="publish_date"/>
+                            <field name="publisher"/>
+                            <field name="price"/>
+                            <field name="binding_type"/>
+                            <field name="borrowed"/>
+                            <field name="date_last_borrowed"/>
+                            <field name="description" colspan="4"/>
+                            <field name='e_link' colspan="4"/>
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!--action-->
+        <record id="action_zerone_books" model="ir.actions.act_window">
+            <field name="name">图书管理（action视图中设置的名字）</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">zerone.book</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_author_group': 1}</field>
+            <field name="search_view_id" ref="view_zerone_books_search"/>
+        </record>
+        <!--Menu-->
+        <menuitem action="action_zerone_books"
+                  id="menu_zerone_books"
+                  name="3图书管理"
+                  parent="menu_books_root"
+                  sequence="20"
+        />
+    </data>
+</odoo>
