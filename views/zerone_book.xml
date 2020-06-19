@@ -3,7 +3,7 @@
     <data>
         <!-- Top menu item -->
         <menuitem name="1Books" id="menu_books_root" sequence="50" groups="base.group_user"
-                  web_icon="fcwz_manufacture_manage,static/description/icon.png"/>
+                  web_icon="zerone_books,static/description/icon.png"/>
         <menuitem id="menu_books" name='图书' parent="menu_books_root" sequence="15"/>
 
         <!--Search View-->
