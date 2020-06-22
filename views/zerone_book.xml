@@ -67,10 +67,88 @@
                             <field name="date_last_borrowed"/>
                             <field name="description" colspan="4"/>
                             <field name='e_link' colspan="4"/>
-
                         </group>
                     </sheet>
                 </form>
+            </field>
+        </record>
+                    <!-- kanban view -->
+        <record id="view_zerone_books_kanban" model="ir.ui.view">
+            <field name="name">Books Kanban</field>
+            <field name="model">zerone.book</field>
+            <field name="arch" type="xml">
+                <kanban create="false" class="o_modules_kanban">
+                    <field name="id"/>
+                    <field name="image_1920"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="isbn"/>
+                    <field name="author"/>
+                    <field name="publisher"/>
+                    <field name="publish_date"/>
+                    <field name="borrowed"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_module_vignette">
+                                <t t-set="v_borrowed" t-value="record.borrowed.raw_value == true"/>
+        
+                                <!-- 一部分 卡片的可展开菜单 -->
+                                <div class="o_dropdown_kanban dropdown" tabindex="-1">
+                                    <a class="dropdown-toggle o-no-caret btn" data-toggle="dropdown"
+                                    data-display="static" href="#" role="button" aria-label="Dropdown menu"
+                                    title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <!-- type="edit" 当存在type属性，且值为edit时，点击这个下拉项，会进入表单编辑状态 -->
+                                        <a type="edit" class="dropdown-item">编辑</a>
+                                        <!-- type="delete" 当存在type属性，且值为delete时，点击这个下拉项，会提示是否删除这条记录 -->
+                                        <a type="delete" class="dropdown-item">删除</a>
+                                        <!-- 调用模型后台方法 调用后台方法action_return，设为未被借阅-->
+                                        <a t-if="v_borrowed == true" name="action_return" type="object"
+                                        role="menuitem" class="dropdown-item">设为未被借阅
+                                        </a>
+                                        <!-- 调用模型后台方法 调用后台方法action_borrow，设为被借阅 -->
+                                        <a t-if="v_borrowed == false" name="action_borrow" type="object"
+                                        role="menuitem" class="dropdown-item">设为已被借阅
+                                        </a>
+                                    </div>
+                                </div>
+                            
+                                <!-- 二部分 卡片的内容 -->    
+                                <img role="img" t-att-alt="record.name.value" t-att-title="record.name.raw_value"
+                                    style="float:left;max-height:127px;"
+                                    t-att-src="kanban_image('zerone.book', 'image_128', record.id.raw_value)"/>
+                                <div class="oe_module_desc" style="float:left;padding-left:15px;">
+                                    <h4 class="oe_module_name" style="font-size:13px;" >
+                                        <field name="name"/>
+                                        <code>
+                                            <field name="author"/>
+                                        </code>
+                                    </h4>
+                                    <p class="oe_isbn">
+                                        <field name="isbn"/>
+                                    </p>
+                                    <p class="oe_publish_info">
+                                        <field name="publisher"/>
+                                        <field name="publish_date"/>
+                                    </p>
+                                    <div class="oe_module_action">
+                                        <!-- 调用后台方法展示形式2 -->
+                                        <button type="object" class="btn btn-primary btn-sm"
+                                                name="action_return"
+                                                t-if="record.borrowed.raw_value == true">设为未被借阅
+                                        </button>
+                                        <button type="object" class="btn btn-primary btn-sm"
+                                                name="action_borrow"
+                                                t-if="record.borrowed.raw_value == false">设为已被借阅
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
             </field>
         </record>
         <!--action-->
@@ -78,7 +156,7 @@
             <field name="name">図書管理（action viewにおける表示）</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">zerone.book</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,kanban</field>
             <field name="domain">[]</field>
             <!-- こちらはsearch欄の場所で最初から上記設定したgroup化について最初からデフォルトとなってる設定 -->
             <field name="context">{'search_default_author_group': 1, 'search_default_name_group':1}</field>
