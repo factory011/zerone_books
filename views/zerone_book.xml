@@ -4,7 +4,7 @@
         <!-- Top menu item -->
         <menuitem name="1Books" id="menu_books_root" sequence="50" groups="base.group_user"
                   web_icon="zerone_books,static/description/icon.png"/>
-        <menuitem id="menu_books" name='图书' parent="menu_books_root" sequence="15"/>
+        <menuitem id="menu_books" name='図書' parent="menu_books_root" sequence="15"/>
 
         <!--Search View-->
         <record id="view_zerone_books_search" model="ir.ui.view">
@@ -13,13 +13,15 @@
             <field name="arch" type="xml">
 <!--                ===========================-->
                 <search string="Books">
+                <!-- 検索欄に文字を入力したら出てくる候補のカスタマイズ -->
                     <field name="code"/>
                     <field name="name"/>
                     <field name="author"/>
-                    <group expand="0" string="Group By">
+                <!-- グループ化のドロップダウンメニューに候補として追加する内容 -->
+                    <group expand="1" string="Group By">
                         <filter string="作者" name="author_group" context="{'group_by':'author'}"/>
-<!--                        name_group是过滤器名称-->
-                        <filter string="图书名称" name="name_group" context="{'group_by':'name'}"/>
+                <!--name="name_group"はフィルター名称です。上記fieldのname名とかぶったら表示がバグる可能性あるので回避必至。-->
+                        <filter string="図書名" name="name_group" context="{'group_by':'name'}"/>
                     </group>
                 </search>
 <!--                ===============================-->
@@ -44,9 +46,9 @@
             <field name="arch" type="xml">
                 <form string="Books">
                     <header>
-                        <button name="action_borrow" type="object" string="借阅" class="btn-primary"
+                        <button name="action_borrow" type="object" string="貸出" class="btn-primary"
                                 attrs="{'invisible': [('borrowed', '=', True)]}"/>
-                        <button name="action_return" type="object" string="归还" class="btn-primary"
+                        <button name="action_return" type="object" string="返却" class="btn-primary"
                                 attrs="{'invisible': [('borrowed', '=', False)]}"/>
                     </header>
                     <sheet string="5Books">
@@ -73,18 +75,21 @@
         </record>
         <!--action-->
         <record id="action_zerone_books" model="ir.actions.act_window">
-            <field name="name">图书管理（action视图中设置的名字）</field>
+            <field name="name">図書管理（action viewにおける表示）</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">zerone.book</field>
-            <field name="view_mode">tree,form,kanban</field>
+            <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
-            <field name="context">{'search_default_author_group': 1}</field>
+            <!-- こちらはsearch欄の場所で最初から上記設定したgroup化について最初からデフォルトとなってる設定 -->
+            <field name="context">{'search_default_author_group': 1, 'search_default_name_group':1}</field>
+            <!-- ここのrefはsearch viewのidを入れないといけないです -->
             <field name="search_view_id" ref="view_zerone_books_search"/>
         </record>
         <!--Menu-->
+        <!-- nameは子メニューの名称 -->
         <menuitem action="action_zerone_books"
                   id="menu_zerone_books"
-                  name="3图书管理"
+                  name="3図書管理"
                   parent="menu_books_root"
                   sequence="20"
         />
