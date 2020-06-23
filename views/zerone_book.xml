@@ -53,7 +53,7 @@
                     </header>
                     <sheet string="5Books">
                         <group col="4">
-                            <field name="image_128" />
+                            <field name="image_1920"/>
                             <field name="name"/>
                             <field name="code"/>
                             <field name="author"/>
