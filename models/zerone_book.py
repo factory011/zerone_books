@@ -4,6 +4,7 @@ from odoo import api, fields, models, _
 class ZeroneBook(models.Model):
     _name = "zerone.book"
     _description = "Zerone Books"
+    _order = "code desc"
 
     _inherit = ['image.mixin']
 

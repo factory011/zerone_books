@@ -157,6 +157,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">zerone.book</field>
             <field name="view_mode">tree,form,kanban</field>
+            <!-- こちらのドメインは最初から表示される内容のフィルタをかけて限定表示するような機能設定 -->
             <field name="domain">[]</field>
             <!-- こちらはsearch欄の場所で最初から上記設定したgroup化について最初からデフォルトとなってる設定 -->
             <field name="context">{'search_default_author_group': 1, 'search_default_name_group':1}</field>
