@@ -2,9 +2,17 @@
 <odoo>
     <data>
         <!-- Top menu item -->
-        <menuitem name="1Books" id="menu_books_root" sequence="50" groups="base.group_user"
+        <menuitem name="Books" id="menu_books_root" sequence="50" groups="base.group_user"
                   web_icon="zerone_books,static/description/icon.png"/>
         <menuitem id="menu_books" name='図書' parent="menu_books_root" sequence="15"/>
+        <!--Menu-->
+        <!-- nameは子メニューの名称 -->
+        <menuitem action="action_zerone_books"
+                  id="menu_zerone_books"
+                  name="図書管理"
+                  parent="menu_books"
+                  sequence="20"
+        />
 
         <!--Search View-->
         <record id="view_zerone_books_search" model="ir.ui.view">
@@ -32,9 +40,11 @@
             <field name="name">zerone.book.tree</field>
             <field name="model">zerone.book</field>
             <field name="arch" type="xml">
-                <tree string="Books">
+                <tree string="Books"> 
+                <!-- editable='bottom'の属性をtreeタグにつけると、treeのリストはそのまま編集可能になるが、フォームは開けなくなる -->
+                    <field name="code" />
                     <field name="name"/>
-                    <field name="code"/>
+                    <field name='isbn'/>
                     <field name="date_last_borrowed"/>
                 </tree>
             </field>
@@ -46,9 +56,10 @@
             <field name="arch" type="xml">
                 <form string="Books">
                     <header>
+                    <!-- ボタンを設置。もしborrowedがTrueかFalseで違うボタンを表示する→ボタン押されたらborrowedの値を変更 -->
                         <button name="action_borrow" type="object" string="貸出" class="btn-primary"
                                 attrs="{'invisible': [('borrowed', '=', True)]}"/>
-                        <button name="action_return" type="object" string="返却" class="btn-primary"
+                        <button name="action_return" type="object" string="返却" class="btn-success"
                                 attrs="{'invisible': [('borrowed', '=', False)]}"/>
                     </header>
                     <sheet string="5Books">
@@ -153,24 +164,24 @@
         </record>
         <!--action-->
         <record id="action_zerone_books" model="ir.actions.act_window">
+            <!-- ビューにおける名称 -->
             <field name="name">図書管理（action viewにおける表示）</field>
+            <!-- ウィンドーのアクションだよ -->
             <field name="type">ir.actions.act_window</field>
+            <!-- モデルと関連づける -->
             <field name="res_model">zerone.book</field>
+            <!-- この動作はどのようなビューを表示させるか規定 -->
             <field name="view_mode">tree,form,kanban</field>
             <!-- こちらのドメインは最初から表示される内容のフィルタをかけて限定表示するような機能設定 -->
+            <!-- 例：<field name="domain">[('author','=','金庸')]</field> -->
+            <!-- <field name="domain">[('author','=','金庸')]</field> -->
             <field name="domain">[]</field>
             <!-- こちらはsearch欄の場所で最初から上記設定したgroup化について最初からデフォルトとなってる設定 -->
-            <field name="context">{'search_default_author_group': 1, 'search_default_name_group':1}</field>
-            <!-- ここのrefはsearch viewのidを入れないといけないです -->
+            <!-- ここでの命名法は特殊で、search_default_から始まり、後ろに検索ビューのとあるfilterのnameを入れる -->
+            <field name="context">{}</field>
+            <!-- 'search_default_author_group': 1, 'search_default_name_group':1 上記のcontextに入力 -->
+            <!-- ここのrefはsearch viewのidを入れないといけない -->
             <field name="search_view_id" ref="view_zerone_books_search"/>
         </record>
-        <!--Menu-->
-        <!-- nameは子メニューの名称 -->
-        <menuitem action="action_zerone_books"
-                  id="menu_zerone_books"
-                  name="3図書管理"
-                  parent="menu_books_root"
-                  sequence="20"
-        />
     </data>
 </odoo>
