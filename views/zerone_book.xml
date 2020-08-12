@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Top menu item -->
+        <!--Menu-->
+        <!-- Top Menu Item -->
         <menuitem name="Books" id="menu_books_root" sequence="50" groups="base.group_user"
                   web_icon="zerone_books,static/description/icon.png"/>
+        <!-- Middle Menu -->
         <menuitem id="menu_books" name='図書' parent="menu_books_root" sequence="15"/>
-        <!--Menu-->
-        <!-- nameは子メニューの名称 -->
+        <!-- Child Menu 子メニューの名称 -->
         <menuitem action="action_zerone_books"
                   id="menu_zerone_books"
                   name="図書管理"
@@ -89,6 +90,7 @@
             <field name="model">zerone.book</field>
             <field name="arch" type="xml">
                 <kanban create="false" class="o_modules_kanban">
+                <!-- kanbanビューで使いたいフィールドを宣言 -->
                     <field name="id"/>
                     <field name="image_1920"/>
                     <field name="name"/>
@@ -103,7 +105,7 @@
                             <div class="oe_module_vignette">
                                 <t t-set="v_borrowed" t-value="record.borrowed.raw_value == true"/>
         
-                                <!-- 一部分 卡片的可展开菜单 -->
+                                <!-- 第１部分　展開できるメニュー -->
                                 <div class="o_dropdown_kanban dropdown" tabindex="-1">
                                     <a class="dropdown-toggle o-no-caret btn" data-toggle="dropdown"
                                     data-display="static" href="#" role="button" aria-label="Dropdown menu"
@@ -115,7 +117,7 @@
                                         <a type="edit" class="dropdown-item">编辑</a>
                                         <!-- type="delete" 当存在type属性，且值为delete时，点击这个下拉项，会提示是否删除这条记录 -->
                                         <a type="delete" class="dropdown-item">删除</a>
-                                        <!-- 调用模型后台方法 调用后台方法action_return，设为未被借阅-->
+                                        <!-- 调用模型后台方法 调用后台方法action_return，设为未被借阅 这里使用的自定义的方式所以type='object'-->
                                         <a t-if="v_borrowed == true" name="action_return" type="object"
                                         role="menuitem" class="dropdown-item">设为未被借阅
                                         </a>
@@ -126,7 +128,8 @@
                                     </div>
                                 </div>
                             
-                                <!-- 二部分 卡片的内容 -->    
+                                <!-- 第２部分 kanbanの内容 -->
+                                <!-- 第１行目は画像の設置：t-att-srcは像画の場所を指定 -->
                                 <img role="img" t-att-alt="record.name.value" t-att-title="record.name.raw_value"
                                     style="float:left;max-height:127px;"
                                     t-att-src="kanban_image('zerone.book', 'image_128', record.id.raw_value)"/>
